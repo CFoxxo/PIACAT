@@ -81,7 +81,10 @@ class CreateAccount:
 	
 	def save_cookies(self):
 		try:
+			global currentproxy
 			pickle.dump(self.session.cookies, open(".\\cookies\\{0.username}.p".format(self), "wb"))
+			with open("created-accounts.txt", "ab") as a:
+				a.write(f'{username}:{password}:{email}:{currentproxy}')
 			print(f"{self.username} -> STORED COOKIES.")
 		except Exception as e:
 			print("{self.username} -> COULD NOT STORE COOKIES! {e}")
