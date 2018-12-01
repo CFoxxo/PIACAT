@@ -72,12 +72,12 @@ class CreateAccount:
 			print(f'{self.username} -> {request.text}')
 			
 			if response["account_created"] == False:
-				print("{self.username} -> COULDN'T CREATE.")
+				print(f"{self.username} -> COULDN'T CREATE.")
 			else:
 				print(f"{self.username} -> SUCCESS! Storing cookies.")
 				self.save_cookies()
 		except Exception as e:
-			print(f'{self.username} -> Something went wrong when trying to create: {e}')
+			print(f"{self.username} -> Something went wrong when trying to create: {e}")
 	
 	def save_cookies(self):
 		try:
@@ -87,7 +87,7 @@ class CreateAccount:
 				a.write(f'{username}:{password}:{email}:{currentproxy}')
 			print(f"{self.username} -> STORED COOKIES.")
 		except Exception as e:
-			print("{self.username} -> COULD NOT STORE COOKIES! {e}")
+			print(f"{self.username} -> COULD NOT STORE COOKIES! {e}")
 
 if __name__ == "__main__":
 	with open("config.json", "r") as config:
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 		config = json.loads(config.read())
 		#threads = ThreadManager(MAX_THREADS = int(config[threads]))
 		
-		while True:
+		while True: #will soon be replaced with a threading thingy!
 			if config["realistic-usernames"].lower() == "true":
 				fake = Faker()
 				name = fake.name()
@@ -112,7 +112,7 @@ if __name__ == "__main__":
 			else:
 				password = config['account-passwords']
 			
-			email = '{}@{}.net'.format(''.join(random.choices(string.ascii_uppercase + string.digits, k=5)), ''.join(random.choices(string.ascii_uppercase + string.digits, k=5)))
+			email = '{}@{}.net'.format(''.join(random.choices(string.ascii_uppercase + string.digits, k=5)), ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))) # i know, inconsistent, but it's a one liner and it looks better.
 			
 			account = CreateAccount(name, username, password, email)
 			account.create_account()
