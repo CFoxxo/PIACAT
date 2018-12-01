@@ -84,36 +84,38 @@ class CreateAccount:
 			global currentproxy
 			pickle.dump(self.session.cookies, open(".\\cookies\\{0.username}.p".format(self), "wb"))
 			with open("created-accounts.txt", "ab") as a:
-				a.write(f'{username}:{password}:{email}:{currentproxy}')
+				a.write("{username}:{password}:{email}:{currentproxy}\n")
 			print(f"{self.username} -> STORED COOKIES.")
 		except Exception as e:
 			print(f"{self.username} -> COULD NOT STORE COOKIES! {e}")
-
-if __name__ == "__main__":
-	with open("config.json", "r") as config:
+	
+	def start(self):
+		with open("config.json", "r") as config:
 		print('START -> Started.')
 		config = json.loads(config.read())
-		#threads = ThreadManager(MAX_THREADS = int(config[threads]))
+		threads = ThreadManager(MAX_THREADS = int(config[threads]))
 		
-		while True: #will soon be replaced with a threading thingy!
-			if config["realistic-usernames"].lower() == "true":
-				fake = Faker()
-				name = fake.name()
-				username = name
-				for character in [' ', '\'']:
-					username = username.replace(character, '')
-				username = username.lower() + str(random.randint(1,99))
-			else:
-				username = config["username-base"] + ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
-				name = username
+		if config["realistic-usernames"].lower() == "true":
+			fake = Faker()
+			name = fake.name()
+			username = name
+			for character in [' ', '\'']:
+				username = username.replace(character, '')
+			username = username.lower() + str(random.randint(1,99))
+		else:
+			username = config["username-base"] + ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+			name = username
+		
+		if config["use-random-passwords"].lower() == "true":
+			password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+		else:
+			password = config['account-passwords']
+		
+		email = '{}@{}.net'.format(''.join(random.choices(string.ascii_uppercase + string.digits, k=5)), ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))) # i know, inconsistent, but it's a one liner and it looks better.
 			
-			if config["use-random-passwords"].lower() == "true":
-				password = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-			else:
-				password = config['account-passwords']
-			
-			email = '{}@{}.net'.format(''.join(random.choices(string.ascii_uppercase + string.digits, k=5)), ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))) # i know, inconsistent, but it's a one liner and it looks better.
-			
-			account = CreateAccount(name, username, password, email)
-			account.create_account()
-		#threads.load(CreateAccount(name=name, username=username, email=email, password=password))
+		account = CreateAccount(name, username, password, email)
+		account.create_account()
+		threads.load(CreateAccount(name=name, username=username, email=email, password=password))
+
+if __name__ == "__main__":
+	
