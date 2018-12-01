@@ -1,5 +1,5 @@
 # PIACAT
-## PIACAT (Python Instagram Account Creation Automation Tool) is a mass Instagram account creator tool.
+#### PIACAT (Python Instagram Account Creation Automation Tool) is a mass Instagram account creator tool.
 
 Install:
 1. Do `pip install Faker` in your terminal/command line.
