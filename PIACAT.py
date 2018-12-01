@@ -88,12 +88,12 @@ class CreateAccount:
 			print(f"{self.username} -> STORED COOKIES.")
 		except Exception as e:
 			print(f"{self.username} -> COULD NOT STORE COOKIES! {e}")
-	
-	def start(self):
-		with open("config.json", "r") as config:
-		print('START -> Started.')
+
+if __name__ == "__main__":
+	with open("config.json", "r") as config:
+		print("START -> Started.")
 		config = json.loads(config.read())
-		threads = ThreadManager(MAX_THREADS = int(config[threads]))
+		#threads = ThreadManager(MAX_THREADS = int(config[threads])) # threading will come soon, as of now i'm too lazy to get off my ass and do something about it
 		
 		if config["realistic-usernames"].lower() == "true":
 			fake = Faker()
@@ -115,7 +115,4 @@ class CreateAccount:
 			
 		account = CreateAccount(name, username, password, email)
 		account.create_account()
-		threads.load(CreateAccount(name=name, username=username, email=email, password=password))
-
-if __name__ == "__main__":
-	
+		#threads.load(CreateAccount(name=name, username=username, email=email, password=password))
